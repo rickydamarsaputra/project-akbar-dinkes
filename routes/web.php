@@ -1,5 +1,13 @@
 <?php
 
+use App\Exports\ReportExcel;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BarangKeluarController;
+use App\Http\Controllers\BarangMasukController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MutasiBarangController;
+use App\Http\Controllers\PenyediaController;
+use App\Http\Controllers\RekeningController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +21,78 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::controller(AuthController::class)->name('auth.')->group(function () {
+    Route::get('/', 'loginView')->name('login.view');
+    Route::post('/', 'loginAction')->name('login.action');
+    Route::get('/logout', 'logoutAction')->name('logout.action');
+});
+
+Route::prefix('dashboard')->middleware(['auth'])->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+
+    // penyedia route
+    Route::controller(PenyediaController::class)->prefix('penyedia')->name('penyedia.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'createView')->name('create.view');
+        Route::post('/create', 'createAction')->name('create.action');
+        Route::get('/update/{id}', 'updateView')->name('update.view');
+        Route::put('/update/{id}', 'updateAction')->name('update.action');
+        Route::get('/detail/{id}', 'detail')->name('detail.view');
+        Route::get('/delete/{id}', 'delete')->name('delete.action');
+        Route::get('/datatables', 'datatables')->name('datatables');
+    });
+
+    // rekening route
+    Route::controller(RekeningController::class)->prefix('rekening')->name('rekening.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'createView')->name('create.view');
+        Route::post('/create', 'createAction')->name('create.action');
+        Route::get('/update/{id}', 'updateView')->name('update.view');
+        Route::put('/update/{id}', 'updateAction')->name('update.action');
+        Route::get('/detail/{id}', 'detail')->name('detail.view');
+        Route::get('/delete/{id}', 'delete')->name('delete.action');
+        Route::get('/datatables', 'datatables')->name('datatables');
+    });
+
+    // barang masuk route
+    Route::controller(BarangMasukController::class)->prefix('barang-masuk')->name('barang-masuk.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'createView')->name('create.view');
+        Route::post('/create', 'createAction')->name('create.action');
+        Route::get('/update/{id}', 'updateView')->name('update.view');
+        Route::put('/update/{id}', 'updateAction')->name('update.action');
+        Route::get('/detail/{id}', 'detail')->name('detail.view');
+        Route::get('/delete/{id}', 'delete')->name('delete.action');
+        Route::get('/datatables', 'datatables')->name('datatables');
+    });
+
+    // barang keluar route
+    Route::controller(BarangKeluarController::class)->prefix('barang-keluar')->name('barang-keluar.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'createView')->name('create.view');
+        Route::post('/create', 'createAction')->name('create.action');
+        Route::get('/update/{id}', 'updateView')->name('update.view');
+        Route::put('/update/{id}', 'updateAction')->name('update.action');
+        Route::get('/detail/{id}', 'detail')->name('detail.view');
+        Route::get('/delete/{id}', 'delete')->name('delete.action');
+        Route::get('/datatables', 'datatables')->name('datatables');
+    });
+
+    // mutasi barang route
+    Route::controller(MutasiBarangController::class)->prefix('mutasi-barang')->name('mutasi-barang.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'createView')->name('create.view');
+        Route::post('/create', 'createAction')->name('create.action');
+        Route::get('/update/{id}', 'updateView')->name('update.view');
+        Route::put('/update/{id}', 'updateAction')->name('update.action');
+        Route::get('/detail/{id}', 'detail')->name('detail.view');
+        Route::get('/delete/{id}', 'delete')->name('delete.action');
+        Route::get('/datatables', 'datatables')->name('datatables');
+    });
+
+    // export report route
+    Route::get('/export-report', function () {
+        $file_name = 'report-excel-' . date('dmy') . '.xlsx';
+        return (new ReportExcel)->download($file_name);
+    })->name('export-report');
 });
