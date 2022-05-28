@@ -1,5 +1,9 @@
 <?php
 
+use App\Exports\BarangKeluarExport;
+use App\Exports\BarangMasukExport;
+use App\Exports\MutasiBarangExport;
+use App\Exports\RekeningExport;
 use App\Exports\ReportExcel;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangKeluarController;
@@ -8,6 +12,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MutasiBarangController;
 use App\Http\Controllers\PenyediaController;
 use App\Http\Controllers\RekeningController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,13 +27,25 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::controller(AuthController::class)->name('auth.')->group(function () {
-    Route::get('/', 'loginView')->name('login.view');
-    Route::post('/', 'loginAction')->name('login.action');
+    Route::view('/', 'pages.auth.landing')->name('landing.view');
+    Route::get('/login', 'loginView')->name('login.view');
+    Route::post('/login', 'loginAction')->name('login.action');
     Route::get('/logout', 'logoutAction')->name('logout.action');
 });
 
 Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+
+    // user route
+    Route::controller(UserController::class)->prefix('user')->name('user.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'createView')->name('create.view');
+        Route::post('/create', 'createAction')->name('create.action');
+        Route::get('/update/{id}', 'updateView')->name('update.view');
+        Route::put('/update/{id}', 'updateAction')->name('update.action');
+        Route::get('/delete/{id}', 'delete')->name('delete.action');
+        Route::get('/datatables', 'datatables')->name('datatables');
+    });
 
     // penyedia route
     Route::controller(PenyediaController::class)->prefix('penyedia')->name('penyedia.')->group(function () {
@@ -91,6 +108,20 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     });
 
     // export report route
+    Route::prefix('export')->name('export.')->group(function () {
+        Route::get('/barang-masuk', function () {
+            $file_name = 'barang-masuk-' . time() . '.xlsx';
+            return (new BarangMasukExport)->download($file_name);
+        })->name('barang.masuk');
+        Route::get('/barang-keluar', function () {
+            $file_name = 'barang-keluar-' . time() . '.xlsx';
+            return (new BarangKeluarExport)->download($file_name);
+        })->name('barang.keluar');
+        Route::get('/rekening', function () {
+            $file_name = 'rekening-' . time() . '.xlsx';
+            return (new RekeningExport)->download($file_name);
+        })->name('rekening');
+    });
     Route::get('/export-report', function () {
         $file_name = 'report-excel-' . date('dmy') . '.xlsx';
         return (new ReportExcel)->download($file_name);

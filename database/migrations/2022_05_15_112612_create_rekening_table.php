@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('rekening', function (Blueprint $table) {
             $table->id('id_rekening');
-            $table->integer('no_rekening');
+            $table->string('no_rekening');
             $table->integer('saldo_rekening');
             $table->timestamps();
         });

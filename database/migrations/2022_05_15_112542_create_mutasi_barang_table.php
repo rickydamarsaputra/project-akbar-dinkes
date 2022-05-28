@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('mutasi_barang', function (Blueprint $table) {
             $table->id();
             $table->string('sumber_dana');
-            $table->string('tujuan_penerima');
-            $table->integer('total_harga_mutasi');
+            $table->integer('id_rekening')->default(0);
+            $table->string('tujuan_penerima')->default(null);
+            $table->integer('total_harga_mutasi')->default(0);
             $table->timestamps();
         });
     }

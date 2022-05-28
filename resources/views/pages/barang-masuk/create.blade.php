@@ -28,6 +28,15 @@
           @error('sumber_dana')<small class="form-text text-danger">{{ $message }}</small>@enderror
         </div>
         <div class="form-group">
+          <label for="rekening">Rekening</label>
+          <select class="form-control" id="rekening" name="rekening">
+            @foreach ($rekening as $loopItem)
+              <option value="{{ $loopItem->id_rekening }}">{{ $loopItem->no_rekening }}</option>
+            @endforeach
+          </select>
+          @error('rekening')<small class="form-text text-danger">{{ $message }}</small>@enderror
+        </div>
+        <div class="form-group">
           <label for="unit_kerja">Unit Kerja</label>
           <input type="text" class="form-control" id="unit_kerja" name="unit_kerja" placeholder="masukkan unit kerja...">
           @error('unit_kerja')<small class="form-text text-danger">{{ $message }}</small>@enderror

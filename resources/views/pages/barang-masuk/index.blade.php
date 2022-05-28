@@ -2,8 +2,9 @@
 @section('title', 'Daftar Data Barang Masuk')
 
 @section('content')
-<div class="section-header">
+<div class="section-header d-flex justify-content-between">
   <h1>Daftar Data Barang Masuk</h1>
+  <a href="{{ route('export.barang.masuk') }}" class="btn btn-success">Export Excel</a>
 </div>
 
 <div class="section-body">
@@ -64,18 +65,18 @@
       {
         data: 'id',
         render: function(data){
-          let DELETE_TRUCK_URL = "{{ route('barang-masuk.delete.action', ':id') }}";
-          let UPDATE_TRUCK_URL = "{{ route('barang-masuk.update.view', ':id') }}";
-          let DETAIL_TRUCK_URL = "{{ route('barang-masuk.detail.view', ':id') }}";
+          let DELETE_URL = "{{ route('barang-masuk.delete.action', ':id') }}";
+          let UPDATE_URL = "{{ route('barang-masuk.update.view', ':id') }}";
+          let DETAIL_URL = "{{ route('barang-masuk.detail.view', ':id') }}";
           
-          DELETE_TRUCK_URL = DELETE_TRUCK_URL.replace(':id', data);
-          UPDATE_TRUCK_URL = UPDATE_TRUCK_URL.replace(':id', data);
-          DETAIL_TRUCK_URL = DETAIL_TRUCK_URL.replace(':id', data);
+          DELETE_URL = DELETE_URL.replace(':id', data);
+          UPDATE_URL = UPDATE_URL.replace(':id', data);
+          DETAIL_URL = DETAIL_URL.replace(':id', data);
 
           return `
-            <a class="btn btn-success btn-sm text-capitalize" href="${UPDATE_TRUCK_URL}">update</a>
-            <a class="btn btn-danger btn-sm text-capitalize mx-2 btn_confirm" href="${DELETE_TRUCK_URL}">delete</a>
-            <a class="btn btn-info btn-sm text-capitalize" href="${DETAIL_TRUCK_URL}">detail</a>
+            <a class="btn btn-success btn-sm text-capitalize" href="${UPDATE_URL}">update</a>
+            <a class="btn btn-danger btn-sm text-capitalize mx-2 btn_confirm" href="${DELETE_URL}">delete</a>
+            <a class="btn btn-info btn-sm text-capitalize" href="${DETAIL_URL}">detail</a>
           `;
         }
       }

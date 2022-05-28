@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BarangKeluar;
 use App\Models\BarangMasuk;
+use App\Models\MutasiBarang;
 use App\Models\Penyedia;
 use Illuminate\Http\Request;
 use DataTables;
@@ -29,11 +30,18 @@ class BarangKeluarController extends Controller
             'tujuan' => 'required'
         ]);
 
-        BarangKeluar::create([
+        $barang_keluar = BarangKeluar::create([
             'nama_barang' => $request->nama_barang,
             'sumber_dana' => $request->sumber_dana,
             'unit_kerja' => $request->unit_kerja,
             'tujuan' => $request->tujuan
+        ]);
+
+        MutasiBarang::create([
+            'sumber_dana' => $barang_keluar->sumber_dana,
+            'id_rekening' => 0,
+            'tujuan_penerima' => $barang_keluar->tujuan,
+            'total_harga_mutasi' => 0
         ]);
 
         return redirect()->route('barang-keluar.index');

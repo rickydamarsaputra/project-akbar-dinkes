@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\BarangMasuk;
+use App\Models\MutasiBarang;
 use App\Models\Penyedia;
+use App\Models\Rekening;
 use Illuminate\Http\Request;
 use DataTables;
 
@@ -17,9 +19,11 @@ class BarangMasukController extends Controller
     public function createView()
     {
         $penyedia = Penyedia::get(['nama_penyedia']);
+        $rekening = Rekening::get();
 
         return view('pages.barang-masuk.create', [
-            'penyedia' => $penyedia
+            'penyedia' => $penyedia,
+            'rekening' => $rekening
         ]);
     }
 
@@ -28,17 +32,30 @@ class BarangMasukController extends Controller
         $this->validate($request, [
             'nama_barang' => 'required',
             'sumber_dana' => 'required',
+            'rekening' => 'required',
             'unit_kerja' => 'required',
             'nama_penyedia' => 'required',
             'total_harga_barang_masuk' => 'required|numeric'
         ]);
 
-        BarangMasuk::create([
+        $barang_masuk = BarangMasuk::create([
             'nama_barang' => $request->nama_barang,
             'sumber_dana' => $request->sumber_dana,
             'unit_kerja' => $request->unit_kerja,
             'nama_penyedia' => $request->nama_penyedia,
             'total_harga_barang_masuk' => $request->total_harga_barang_masuk
+        ]);
+
+        $mutasi_barang = MutasiBarang::create([
+            'sumber_dana' => $barang_masuk->sumber_dana,
+            'id_rekening' => $request->rekening,
+            'tujuan_penerima' => '',
+            'total_harga_mutasi' => $request->total_harga_barang_masuk
+        ]);
+
+        $rekening = Rekening::where('id_rekening', '=', $request->rekening)->first();
+        $rekening->update([
+            'saldo_rekening' => $rekening->saldo_rekening - $mutasi_barang->total_harga_mutasi
         ]);
 
         return redirect()->route('barang-masuk.index');

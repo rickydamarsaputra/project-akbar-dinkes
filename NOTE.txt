@@ -1,0 +1,29 @@
+NOTE 25052022
+
+- create user ✅
+- report excel di pisah per master (barang masuk/keluar, rekening)
+- auto mutasi barang
+	-> barang masuk -> insert mutasi_barang -> mengurangi saldo
+		-> id_rekening
+		-> tujuan_penerima kosong
+		-> total_harga_mutasi -> total_harga_barang_masuk ✅
+ 	-> barang keluar -> insert mutasi_barang
+		-> id_rekening kosong
+		-> tujuan_penerima -> tujuan
+		-> total_harga_mutasi 0 ✅
+- saldo awal: total saldo rekening ✅
+- saldo akhir: total total_harga_barang_masuk barang masuk ✅
+
+MUTASI BARANG
+
+id
+id_rekening
+sumber_dana
+tujuan_penerima
+total_harga_mutasi
+
+SPEC
+- laravel (framwork php) 9.11
+- php 8.1
+- bootstrap 4.2
+- mysql 5.7.33

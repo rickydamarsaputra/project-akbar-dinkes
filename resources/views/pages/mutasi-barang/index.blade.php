@@ -48,26 +48,32 @@
         data: 'sumber_dana'
       },
       {
-        data: 'tujuan_penerima'
+        data: 'tujuan_penerima',
+        render: function(data){
+          return data ? data : '-';
+        }
       },
       {
-        data: 'total_harga_mutasi'
+        data: 'total_harga_mutasi',
+        render: function(data){
+          return data ? data : '-';
+        }
       },
       {
         data: 'id',
         render: function(data){
-          let DELETE_TRUCK_URL = "{{ route('mutasi-barang.delete.action', ':id') }}";
-          let UPDATE_TRUCK_URL = "{{ route('mutasi-barang.update.view', ':id') }}";
-          let DETAIL_TRUCK_URL = "{{ route('mutasi-barang.detail.view', ':id') }}";
+          let DELETE_URL = "{{ route('mutasi-barang.delete.action', ':id') }}";
+          let UPDATE_URL = "{{ route('mutasi-barang.update.view', ':id') }}";
+          let DETAIL_URL = "{{ route('mutasi-barang.detail.view', ':id') }}";
           
-          DELETE_TRUCK_URL = DELETE_TRUCK_URL.replace(':id', data);
-          UPDATE_TRUCK_URL = UPDATE_TRUCK_URL.replace(':id', data);
-          DETAIL_TRUCK_URL = DETAIL_TRUCK_URL.replace(':id', data);
+          DELETE_URL = DELETE_URL.replace(':id', data);
+          UPDATE_URL = UPDATE_URL.replace(':id', data);
+          DETAIL_URL = DETAIL_URL.replace(':id', data);
 
           return `
-            <a class="btn btn-success btn-sm text-capitalize" href="${UPDATE_TRUCK_URL}">update</a>
-            <a class="btn btn-danger btn-sm text-capitalize mx-2 btn_confirm" href="${DELETE_TRUCK_URL}">delete</a>
-            <a class="btn btn-info btn-sm text-capitalize" href="${DETAIL_TRUCK_URL}">detail</a>
+            <a class="btn btn-success btn-sm text-capitalize" href="${UPDATE_URL}">update</a>
+            <a class="btn btn-danger btn-sm text-capitalize mx-2 btn_confirm" href="${DELETE_URL}">delete</a>
+            <a class="btn btn-info btn-sm text-capitalize" href="${DETAIL_URL}">detail</a>
           `;
         }
       }

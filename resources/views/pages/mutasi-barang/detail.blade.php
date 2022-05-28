@@ -15,11 +15,11 @@
       </div>
       <div class="form-group">
         <label for="tujuan_penerima">Tujuan Penerima</label>
-        <input type="text" class="form-control" id="tujuan_penerima" name="tujuan_penerima" value="{{ $mutasi_barang->tujuan_penerima }}" readonly>
+        <input type="text" class="form-control" id="tujuan_penerima" name="tujuan_penerima" value="{{ empty($mutasi_barang->tujuan_penerima) ? '-' : $mutasi_barang->tujuan_penerima }}" readonly>
       </div>
       <div class="form-group">
         <label for="total_harga_mutasi">Total Harga Mutasi</label>
-        <input type="text" class="form-control" id="total_harga_mutasi" name="total_harga_mutasi" value="{{ $mutasi_barang->total_harga_mutasi }}" readonly>
+        <input type="text" class="form-control" id="total_harga_mutasi" name="total_harga_mutasi" value="{{ empty($mutasi_barang->total_harga_mutasi) ? '-' : $mutasi_barang->total_harga_mutasi }}" readonly>
       </div>
     </div>
   </div>
